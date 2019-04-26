@@ -7,6 +7,7 @@ if (!gaId) {
 // Initialize async analytics
 window.ga = window.ga || function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 ga('create', `${gaId}`, 'auto')
+ga('require', 'ec')
 
 // Load analytics script
 const script = document.createElement('script')
@@ -28,6 +29,18 @@ const pageView = (data:any) => {
   ga('send', 'pageview')
 }
 
+// Commo ProductDetail function
+const productDetail = (product: any) => {
+  ga('ec:addProduct', {
+    'id': product.productId,
+    'name': product.productName,
+    'category': product.categoryId,
+    'brand': product.brand,
+    'variant': product.variant,
+  });
+  ga('ec:setAction', 'detail')
+}
+
 // Event listener for pageview
 window.addEventListener('message', e => {
   if(e.data.pageUrl && e.data.pageUrl !== currentUrl) {
@@ -44,5 +57,10 @@ window.addEventListener('message', e => {
         return
       }
     }
+  }
+
+  // Event listener for productDetail
+  if (e.data.event === 'productView') {
+    productDetail(e.data.product)
   }
 })
