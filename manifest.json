@@ -1,13 +1,10 @@
 {
   "name": "google-analytics",
-  "vendor": "gocommerce",
+  "vendor": "vtex",
   "version": "0.0.1",
   "title": "Google Analytics",
-  "description": "Google Tag Manager",
+  "description": "Google Analytics app",
   "mustUpdateAt": "2019-04-03",
-  "registries": [
-    "smartcheckout"
-  ],
   "scripts": {
     "postreleasy": "vtex publish --verbose"
   },
