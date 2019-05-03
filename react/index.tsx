@@ -29,7 +29,7 @@ const pageView = (data:any) => {
   ga('send', 'pageview')
 }
 
-// Commo ProductDetail function
+// Common ProductDetail function
 const productDetail = (product: any) => {
   ga('ec:addProduct', {
     'id': product.productId,
