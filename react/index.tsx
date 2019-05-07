@@ -47,6 +47,8 @@ const productDetail = (product: any) => {
     brand: product.brand,
     variant: product.variant,
   })
+  ga('ec:setAction', 'detail')
+  ga('send', 'event', 'productDetail', 'view')
 }
 
 // Common OrderPlaced function
@@ -89,7 +91,6 @@ window.addEventListener('message', e => {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
     productDetail(e.data.product)
-    ga('ec:setAction', 'detail')
     return
   }
 
