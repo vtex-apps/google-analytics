@@ -36,7 +36,9 @@ const pageView = (data: any) => {
   ga('send', 'pageview')
 }
 
-// Common ProductDetail function
+/** Product viewed event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
+ */
 const productDetail = (product: any) => {
   ga('ec:addProduct', {
     id: product.productId,
@@ -56,6 +58,21 @@ const orderPlaced = (order: any) => {
     ...order,
   })
 }
+
+/** Purchase event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transaction
+ */
+const purchase = (order: any) => {
+  ga('ec:setAction', 'purchase', {
+    id: order.orderGroup,
+    affiliation: order.transactionAffiliation,
+    revenue: order.transactionTotal,
+    tax: order.transactionTax,
+    shipping: order.transactionShipping,
+    coupon: order.coupon,
+  })
+}
+
 // Event listener for pageview
 window.addEventListener('message', e => {
   if (e.data.pageUrl && e.data.pageUrl !== currentUrl) {
@@ -82,5 +99,6 @@ window.addEventListener('message', e => {
   // Event listener for orderPlaced
   if (e.data.event === 'orderPlaced') {
     orderPlaced(e.data)
+    purchase(e.data)
   }
 })
