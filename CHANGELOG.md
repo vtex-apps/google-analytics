@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Dispatch `orderPlaced` event.
+
 ## [0.1.0] - 2019-05-06
-### Added 
-- Added listener for productDetils events.
+
+### Added
+
+- Added listener for `productDetails` event.
 
 ## [0.0.2] - 2019-05-01
+
 ### Added
+
 - Added listener for pageview events.
