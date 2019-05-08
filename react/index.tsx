@@ -47,7 +47,6 @@ const productDetail = (product: any) => {
     brand: product.brand,
     variant: product.variant,
   })
-  ga('ec:setAction', 'detail')
 }
 
 // Common OrderPlaced function
@@ -63,6 +62,18 @@ const orderPlaced = (order: any) => {
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transaction
  */
 const purchase = (order: any) => {
+  order.transactionProducts.map((product: any) => {
+    ga('ec:addProduct', {
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      brand: product.brand,
+      variant: product.skuName,
+      price: product.sellingPrice,
+      quantity: product.quantity,
+    })
+  })
+
   ga('ec:setAction', 'purchase', {
     id: order.orderGroup,
     affiliation: order.transactionAffiliation,
@@ -75,6 +86,20 @@ const purchase = (order: any) => {
 
 // Event listener for pageview
 window.addEventListener('message', e => {
+  // Event listener for productDetail
+  if (e.data.event === 'productView') {
+    productDetail(e.data.product)
+    ga('ec:setAction', 'detail')
+    return
+  }
+
+  // Event listener for orderPlaced
+  if (e.data.event === 'orderPlaced') {
+    orderPlaced(e.data)
+    purchase(e.data)
+    return
+  }
+
   if (e.data.pageUrl && e.data.pageUrl !== currentUrl) {
     switch (e.data.event) {
       case 'pageView': {
@@ -89,16 +114,5 @@ window.addEventListener('message', e => {
         return
       }
     }
-  }
-
-  // Event listener for productDetail
-  if (e.data.event === 'productView') {
-    productDetail(e.data.product)
-  }
-
-  // Event listener for orderPlaced
-  if (e.data.event === 'orderPlaced') {
-    orderPlaced(e.data)
-    purchase(e.data)
   }
 })
