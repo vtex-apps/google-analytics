@@ -1,5 +1,9 @@
 import { orderPlaced } from './events/commonEvents'
-import { productDetail, purchase } from './events/enhancedCommerce'
+import {
+  productDetail,
+  productClick,
+  purchase,
+} from './events/enhancedCommerce'
 
 const gaId = window.__SETTINGS__.gaId
 
@@ -44,6 +48,12 @@ window.addEventListener('message', e => {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
     productDetail(e.data.product)
+    return
+  }
+
+  // Event listener for productClick
+  if (e.data.event === 'productClick') {
+    productClick(e.data.product)
     return
   }
 

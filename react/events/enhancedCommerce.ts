@@ -1,9 +1,5 @@
 import { getCategory } from './../utils'
 
-/** Product viewed event
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
- */
-
 interface Item {
   itemId: string
   name: string
@@ -22,6 +18,9 @@ interface Product {
 const getSkuName = (selectedSku: string, items: Item[]) =>
   (items.find((item: Item) => selectedSku === item.itemId) || ({} as Item)).name
 
+/** Product viewed event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
+ */
 export const productDetail = (product: Product) => {
   ga('ec:addProduct', {
     brand: product.brand,
@@ -56,7 +55,11 @@ export const productClick = (product: Product) => {
     variant: getSkuName(product.selectedSku, product.items),
   })
   ga('ec:setAction', 'click')
-  ga('send', 'event', 'productClick', 'click')
+  ga('send', 'event', {
+    eventAction: 'Click',
+    eventCategory: 'Product',
+    nonInteraction: 1,
+  })
 }
 
 /** Purchase event
