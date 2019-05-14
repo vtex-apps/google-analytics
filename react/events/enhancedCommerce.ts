@@ -10,7 +10,11 @@ export const productDetail = (product: any) => {
     variant: product.variant,
   })
   ga('ec:setAction', 'detail')
-  ga('send', 'event', 'Ecommerce', 'Detail', { nonInteraction: 1 })
+  ga('send', 'event', {
+    eventAction: 'Detail -> View',
+    eventCategory: 'Ecommerce -> Product',
+    nonInteraction: 1,
+  })
 }
 
 /** Purchase event
@@ -38,5 +42,9 @@ export const purchase = (order: any) => {
     tax: order.transactionTax,
   })
 
-  ga('send', 'event', 'Ecommerce', 'Purchase', { nonInteraction: 1 })
+  ga('send', 'event', {
+    eventAction: 'Purchase -> View',
+    eventCategory: 'Ecommerce -> OrderPlaced',
+    nonInteraction: 1,
+  })
 }
