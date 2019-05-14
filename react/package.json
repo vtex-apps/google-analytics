@@ -1,11 +1,10 @@
 {
-  "name": "gocommerce.google-analytics",
-  "version": "0.0.0",
-  "description": "Google Analytics.",
+  "name": "vtex.google-analytics",
+  "description": "Google Analytics Pixel App",
   "scripts": {
     "test": "jest"
   },
-  "author": "GoCommerce",
+  "author": "VTEX",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^10.12.18",

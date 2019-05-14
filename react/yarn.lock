@@ -1077,14 +1077,6 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-"vtex.pixel-manager@https://orderplaced--storecomponents.myvtex.com/_v/private/typings/linked/v1/vtex.pixel-manager@0.9.0+build1557251018/public/_types/react":
-  version "0.9.0"
-  resolved "https://orderplaced--storecomponents.myvtex.com/_v/private/typings/linked/v1/vtex.pixel-manager@0.9.0+build1557251018/public/_types/react#ae9461bce5efd88f75e1c053bb3a7e5bc569b150"
-
-"vtex.render-runtime@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.24.0/public/_types/react":
-  version "8.24.0"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.24.0/public/_types/react#f673158a8bf0e438bf4af1b29b617c1916817870"
-
 which@^1.2.9:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"

@@ -1,5 +1,5 @@
-import { orderPlaced } from './components/commonEvents'
-import { productDetail, purchase } from './components/enhancedCommerce'
+import { orderPlaced } from './events/commonEvents'
+import { productDetail, purchase } from './events/enhancedCommerce'
 
 const gaId = window.__SETTINGS__.gaId
 
