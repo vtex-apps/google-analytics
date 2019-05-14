@@ -1,7 +1,7 @@
 {
   "name": "google-analytics",
   "vendor": "vtex",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": "Google Analytics",
   "description": "Google Analytics app",
   "mustUpdateAt": "2019-04-03",

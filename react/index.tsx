@@ -1,3 +1,6 @@
+import { orderPlaced } from './events/commonEvents'
+import { productDetail, purchase } from './events/enhancedCommerce'
+
 const gaId = window.__SETTINGS__.gaId
 
 if (!gaId) {
@@ -36,60 +39,11 @@ const pageView = (data: any) => {
   ga('send', 'pageview')
 }
 
-/** Product viewed event
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
- */
-const productDetail = (product: any) => {
-  ga('ec:addProduct', {
-    id: product.productId,
-    name: product.productName,
-    category: product.categoryId,
-    brand: product.brand,
-    variant: product.variant,
-  })
-}
-
-// Common OrderPlaced function
-const orderPlaced = (order: any) => {
-  ga('send', 'event', {
-    eventCategory: 'orderPlaced',
-    eventAction: 'view',
-    ...order,
-  })
-}
-
-/** Purchase event
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transaction
- */
-const purchase = (order: any) => {
-  order.transactionProducts.map((product: any) => {
-    ga('ec:addProduct', {
-      id: product.id,
-      name: product.name,
-      category: product.category,
-      brand: product.brand,
-      variant: product.skuName,
-      price: product.sellingPrice,
-      quantity: product.quantity,
-    })
-  })
-
-  ga('ec:setAction', 'purchase', {
-    id: order.orderGroup,
-    affiliation: order.transactionAffiliation,
-    revenue: order.transactionTotal,
-    tax: order.transactionTax,
-    shipping: order.transactionShipping,
-    coupon: order.coupon,
-  })
-}
-
 // Event listener for pageview
 window.addEventListener('message', e => {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
     productDetail(e.data.product)
-    ga('ec:setAction', 'detail')
     return
   }
 
