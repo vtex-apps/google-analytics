@@ -1,18 +1,38 @@
 /** Product viewed event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
  */
-export const productDetail = (product: any) => {
+
+interface Item {
+  itemId: string
+  name: string
+}
+
+interface Product {
+  brand: string
+  categoryId: string
+  productId: string
+  productName: string
+  selectedSku: string
+  items: Item[]
+}
+
+const getSkuName = (selectedSku: string, items: Item[]) =>
+  (items.find((item: Item) => selectedSku === item.itemId) || ({} as Item)).name
+
+export const productDetail = (product: Product) => {
   ga('ec:addProduct', {
     brand: product.brand,
     category: product.categoryId,
     id: product.productId,
     name: product.productName,
-    variant: product.variant,
+    variant: getSkuName(product.selectedSku, product.items),
   })
+
   ga('ec:setAction', 'detail')
+
   ga('send', 'event', {
-    eventAction: 'Detail -> View',
-    eventCategory: 'Ecommerce -> Product',
+    eventAction: 'Detail',
+    eventCategory: 'Ecommerce',
     nonInteraction: 1,
   })
 }
@@ -43,8 +63,8 @@ export const purchase = (order: any) => {
   })
 
   ga('send', 'event', {
-    eventAction: 'Purchase -> View',
-    eventCategory: 'Ecommerce -> OrderPlaced',
+    eventAction: 'Purchase',
+    eventCategory: 'Ecommerce',
     nonInteraction: 1,
   })
 }
