@@ -22,16 +22,18 @@ const getSkuName = (selectedSku: string, items: Item[]) =>
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
  */
 export const productDetail = (product: Product) => {
+  if (!product) return
+
+  const category = getCategory(product.categories)
+
   ga('ec:addProduct', {
     brand: product.brand,
-    category: product.categoryId,
+    category: category,
     id: product.productId,
     name: product.productName,
     variant: getSkuName(product.selectedSku, product.items),
   })
-
   ga('ec:setAction', 'detail')
-
   ga('send', 'event', {
     eventAction: 'Detail',
     eventCategory: 'Ecommerce',
