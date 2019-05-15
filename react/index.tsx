@@ -91,10 +91,6 @@ window.addEventListener('message', e => {
         pageView(e.origin, e.data)
         return
       }
-      case 'pageInfo': {
-        pageView(e.origin, e.data)
-        return
-      }
       default: {
         return
       }
