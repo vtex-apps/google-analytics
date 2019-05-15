@@ -45,6 +45,10 @@ interface PageViewData extends EventData {
 
 // Common pageview function
 const pageView = (origin: string, data: PageViewData) => {
+  if (!data.pageUrl || data.pageUrl === currentUrl) {
+    return
+  }
+
   currentUrl = data.pageUrl
   ga('set', {
     location: currentUrl,
@@ -56,8 +60,7 @@ const pageView = (origin: string, data: PageViewData) => {
   ga('send', 'pageview')
 }
 
-// Event listener for pageview
-window.addEventListener('message', e => {
+function listener(e: MessageEvent) {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
     productDetail(e.data.product)
@@ -85,15 +88,11 @@ window.addEventListener('message', e => {
     return
   }
 
-  if (e.data.pageUrl && e.data.pageUrl !== currentUrl) {
-    switch (e.data.event) {
-      case 'pageView': {
-        pageView(e.origin, e.data)
-        return
-      }
-      default: {
-        return
-      }
-    }
+  if (e.data.event === 'pageView') {
+    pageView(e.origin, e.data)
+    return
   }
-})
+}
+
+// Event listener for pageview
+window.addEventListener('message', listener)
