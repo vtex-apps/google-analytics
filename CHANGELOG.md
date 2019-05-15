@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Pass right `page` param on `pageView` event.
+- Remove duplicate `pageView` hit, removing handling of `pageInfo` event.
+
 ## [0.6.0] - 2019-05-17
 
 ### Added
