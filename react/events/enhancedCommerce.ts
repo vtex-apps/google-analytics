@@ -1,6 +1,4 @@
-/** Product viewed event
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
- */
+import { getCategory } from './../utils'
 
 interface Item {
   itemId: string
@@ -10,6 +8,7 @@ interface Item {
 interface Product {
   brand: string
   categoryId: string
+  categories: string[]
   productId: string
   productName: string
   selectedSku: string
@@ -19,20 +18,48 @@ interface Product {
 const getSkuName = (selectedSku: string, items: Item[]) =>
   (items.find((item: Item) => selectedSku === item.itemId) || ({} as Item)).name
 
+/** Product viewed event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
+ */
 export const productDetail = (product: Product) => {
+  if (!product) return
+
+  const category = getCategory(product.categories)
+
   ga('ec:addProduct', {
     brand: product.brand,
-    category: product.categoryId,
+    category: category,
     id: product.productId,
     name: product.productName,
     variant: getSkuName(product.selectedSku, product.items),
   })
-
   ga('ec:setAction', 'detail')
-
   ga('send', 'event', {
     eventAction: 'Detail',
     eventCategory: 'Ecommerce',
+    nonInteraction: 1,
+  })
+}
+
+/** Product clicked event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-click
+ */
+export const productClick = (product: Product) => {
+  if (!product) return
+
+  const category = getCategory(product.categories)
+
+  ga('ec:addProduct', {
+    id: product.productId,
+    name: product.productName,
+    category: category,
+    brand: product.brand,
+    variant: getSkuName(product.selectedSku, product.items),
+  })
+  ga('ec:setAction', 'click')
+  ga('send', 'event', {
+    eventAction: 'Click',
+    eventCategory: 'Product',
     nonInteraction: 1,
   })
 }
