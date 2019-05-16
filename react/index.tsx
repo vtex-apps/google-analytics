@@ -2,6 +2,7 @@ import { orderPlaced } from './events/commonEvents'
 import {
   productDetail,
   productClick,
+  productImpression,
   purchase,
 } from './events/enhancedCommerce'
 
@@ -54,6 +55,12 @@ window.addEventListener('message', e => {
   // Event listener for productClick
   if (e.data.event === 'productClick') {
     productClick(e.data.product)
+    return
+  }
+
+  // Event listener for productImpression
+  if (e.data.event === 'productImpression') {
+    productImpression(e.data.product, e.data.position, e.data.list)
     return
   }
 

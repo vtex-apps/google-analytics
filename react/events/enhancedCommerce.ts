@@ -64,6 +64,34 @@ export const productClick = (product: Product) => {
   })
 }
 
+/** Product Impression event
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
+ */
+export const productImpression = (
+  product: Product,
+  position: number,
+  list: string
+) => {
+  if (!product) return
+
+  const category = getCategory(product.categories)
+
+  ga('ec:addImpression', {
+    id: product.productId,
+    name: product.productName,
+    category: category,
+    brand: product.brand,
+    variant: getSkuName(product.selectedSku, product.items),
+    list: list,
+    position: position,
+  })
+  ga('send', 'event', {
+    eventAction: 'Impression',
+    eventCategory: 'Product',
+    nonInteraction: 1,
+  })
+}
+
 /** Purchase event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transaction
  */
