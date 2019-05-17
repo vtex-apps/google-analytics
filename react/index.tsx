@@ -54,7 +54,9 @@ window.addEventListener('message', e => {
 
   // Event listener for productClick
   if (e.data.event === 'productClick') {
-    productClick(e.data.product)
+    const product = e.data.product
+    product.selectedSku = product.sku.itemId
+    productClick(product)
     return
   }
 
