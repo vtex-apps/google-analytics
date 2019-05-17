@@ -1,10 +1,11 @@
-import { orderPlaced } from './events/commonEvents'
+import { orderPlaced, pageView } from './events/commonEvents'
 import {
   productDetail,
   productClick,
   productImpression,
   purchase,
 } from './events/enhancedCommerce'
+import { OrderPlacedData, ProductViewData, ProductClickData, PageViewData, ProductImpressionData } from './typings/events'
 
 const gaId = window.__SETTINGS__.gaId
 
@@ -30,54 +31,26 @@ script.src = `https://www.google-analytics.com/analytics.js`
 script.async = true
 document.head!.prepend(script)
 
-let currentUrl = ''
-
-interface EventData {
-  event: string
-  eventName: string
-  currency: string
+interface PixelMessage extends MessageEvent {
+  data: ProductViewData | ProductClickData | OrderPlacedData | PageViewData | ProductImpressionData
 }
 
-interface PageViewData extends EventData {
-  pageTitle: string
-  pageUrl: string
-}
-
-// Common pageview function
-const pageView = (origin: string, data: PageViewData) => {
-  if (!data.pageUrl || data.pageUrl === currentUrl) {
-    return
-  }
-
-  currentUrl = data.pageUrl
-  ga('set', {
-    location: currentUrl,
-    page: currentUrl.replace(origin, ''),
-    ...(data.pageTitle && {
-      title: data.pageTitle,
-    }),
-  })
-  ga('send', 'pageview')
-}
-
-function listener(e: MessageEvent) {
+function listener(e: PixelMessage) {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
-    productDetail(e.data.product)
+    productDetail(e.data)
     return
   }
 
   // Event listener for productClick
   if (e.data.event === 'productClick') {
-    const product = e.data.product
-    product.selectedSku = product.sku.itemId
-    productClick(product)
+    productClick(e.data)
     return
   }
 
   // Event listener for productImpression
   if (e.data.event === 'productImpression') {
-    productImpression(e.data.product, e.data.position, e.data.list)
+    productImpression(e.data)
     return
   }
 

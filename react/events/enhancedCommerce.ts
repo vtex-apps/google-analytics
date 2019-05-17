@@ -1,19 +1,11 @@
+import {
+  Item,
+  OrderPlacedData,
+  ProductClickData,
+  ProductImpressionData,
+  ProductViewData,
+} from '../typings/events'
 import { getCategory } from './../utils'
-
-interface Item {
-  itemId: string
-  name: string
-}
-
-interface Product {
-  brand: string
-  categoryId: string
-  categories: string[]
-  productId: string
-  productName: string
-  selectedSku: string
-  items: Item[]
-}
 
 const getSkuName = (selectedSku: string, items: Item[]) =>
   (items.find((item: Item) => selectedSku === item.itemId) || ({} as Item)).name
@@ -21,14 +13,17 @@ const getSkuName = (selectedSku: string, items: Item[]) =>
 /** Product viewed event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actvities
  */
-export const productDetail = (product: Product) => {
-  if (!product) return
+export const productDetail = (data: ProductViewData) => {
+  if (!data.product) {
+    return
+  }
 
+  const product = data.product
   const category = getCategory(product.categories)
 
   ga('ec:addProduct', {
     brand: product.brand,
-    category: category,
+    category,
     id: product.productId,
     name: product.productName,
     variant: getSkuName(product.selectedSku, product.items),
@@ -44,16 +39,19 @@ export const productDetail = (product: Product) => {
 /** Product clicked event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-click
  */
-export const productClick = (product: Product) => {
-  if (!product) return
+export const productClick = (data: ProductClickData) => {
+  if (!data.product) {
+    return
+  }
 
+  const product = data.product
   const category = getCategory(product.categories)
 
   ga('ec:addProduct', {
+    brand: product.brand,
+    category,
     id: product.productId,
     name: product.productName,
-    category: category,
-    brand: product.brand,
     variant: getSkuName(product.selectedSku, product.items),
   })
   ga('ec:setAction', 'click')
@@ -67,23 +65,24 @@ export const productClick = (product: Product) => {
 /** Product Impression event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
  */
-export const productImpression = (
-  product: Product,
-  position: number,
-  list: string
-) => {
-  if (!product) return
+export const productImpression = (data: ProductImpressionData) => {
+  if (!data.product) {
+    return
+  }
+
+  const { product, position, list } = data
+  product.selectedSku = product.sku.itemId
 
   const category = getCategory(product.categories)
 
   ga('ec:addImpression', {
-    id: product.productId,
-    name: product.productName,
-    category: category,
     brand: product.brand,
+    category,
+    id: product.productId,
+    list,
+    name: product.productName,
+    position,
     variant: getSkuName(product.selectedSku, product.items),
-    list: list,
-    position: position,
   })
   ga('send', 'event', {
     eventAction: 'Impression',
@@ -95,8 +94,8 @@ export const productImpression = (
 /** Purchase event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transaction
  */
-export const purchase = (order: any) => {
-  order.transactionProducts.map((product: any) => {
+export const purchase = (data: OrderPlacedData) => {
+  data.transactionProducts.map((product: any) => {
     ga('ec:addProduct', {
       brand: product.brand,
       category: product.category,
@@ -109,12 +108,12 @@ export const purchase = (order: any) => {
   })
 
   ga('ec:setAction', 'purchase', {
-    affiliation: order.transactionAffiliation,
-    coupon: order.coupon,
-    id: order.orderGroup,
-    revenue: order.transactionTotal,
-    shipping: order.transactionShipping,
-    tax: order.transactionTax,
+    affiliation: data.transactionAffiliation,
+    coupon: data.coupon,
+    id: data.orderGroup,
+    revenue: data.transactionTotal,
+    shipping: data.transactionShipping,
+    tax: data.transactionTax,
   })
 
   ga('send', 'event', {
