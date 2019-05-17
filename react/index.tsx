@@ -32,11 +32,27 @@ document.head!.prepend(script)
 
 let currentUrl = ''
 
+interface EventData {
+  event: string
+  eventName: string
+  currency: string
+}
+
+interface PageViewData extends EventData {
+  pageTitle: string
+  pageUrl: string
+}
+
 // Common pageview function
-const pageView = (data: any) => {
+const pageView = (origin: string, data: PageViewData) => {
+  if (!data.pageUrl || data.pageUrl === currentUrl) {
+    return
+  }
+
   currentUrl = data.pageUrl
   ga('set', {
-    page: currentUrl.replace(location.origin, ''),
+    location: currentUrl,
+    page: currentUrl.replace(origin, ''),
     ...(data.pageTitle && {
       title: data.pageTitle,
     }),
@@ -44,8 +60,7 @@ const pageView = (data: any) => {
   ga('send', 'pageview')
 }
 
-// Event listener for pageview
-window.addEventListener('message', e => {
+function listener(e: MessageEvent) {
   // Event listener for productDetail
   if (e.data.event === 'productView') {
     productDetail(e.data.product)
@@ -73,19 +88,11 @@ window.addEventListener('message', e => {
     return
   }
 
-  if (e.data.pageUrl && e.data.pageUrl !== currentUrl) {
-    switch (e.data.event) {
-      case 'pageView': {
-        pageView(e.data)
-        return
-      }
-      case 'pageInfo': {
-        pageView(e.data)
-        return
-      }
-      default: {
-        return
-      }
-    }
+  if (e.data.event === 'pageView') {
+    pageView(e.origin, e.data)
+    return
   }
-})
+}
+
+// Event listener for pageview
+window.addEventListener('message', listener)
