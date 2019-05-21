@@ -1,9 +1,11 @@
 import { orderPlaced } from './events/commonEvents'
 import {
+  addToCart,
   productDetail,
   productClick,
   productImpression,
   purchase,
+  removeFromCart,
 } from './events/enhancedCommerce'
 
 const gaId = window.__SETTINGS__.gaId
@@ -92,6 +94,22 @@ function listener(e: MessageEvent) {
     pageView(e.origin, e.data)
     return
   }
+
+  if (e.data.event === "addToCart") {
+    e.data.items.forEach((product: any) => {
+      product.productName = product.name
+      addToCart(product, product.price, product.quantity)
+    })
+  }
+
+  if (e.data.event === "removeFromCart") {
+    e.data.items.forEach((product: any) => {
+      product.productId = product.id
+      product.productName = product.name
+      removeFromCart(product, product.sellingPrice)
+    })
+  }
+
 }
 
 // Event listener for pageview

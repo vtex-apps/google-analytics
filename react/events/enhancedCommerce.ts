@@ -13,6 +13,7 @@ interface Product {
   productName: string
   selectedSku: string
   items: Item[]
+  variant: string
 }
 
 const getSkuName = (selectedSku: string, items: Item[]) =>
@@ -60,7 +61,6 @@ export const productClick = (product: Product) => {
   ga('send', 'event', {
     eventAction: 'Click',
     eventCategory: 'Product',
-    nonInteraction: 1,
   })
 }
 
@@ -89,6 +89,48 @@ export const productImpression = (
     eventAction: 'Impression',
     eventCategory: 'Product',
     nonInteraction: 1,
+  })
+}
+
+/** Addition to cart events
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#add-remove-cart
+ */
+export const addToCart = (
+  product: Product,
+  price: number,
+  quantity: number
+) => {
+  if (!product) return
+
+  ga('ec:addProduct', {
+    name: product.productName,
+    brand: product.brand,
+    variant: product.variant,
+    price,
+    quantity,
+  })
+  ga('ec:setAction', 'add')
+  ga('send', 'event', {
+    eventAction: 'Click',
+    eventCategory: 'Add to cart',
+  })
+}
+
+/** Removal from cart events
+ * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#add-remove-cart
+ */
+export const removeFromCart = (product: Product, price: number) => {
+  if (!product) return
+
+  ga('ec:addProduct', {
+    id: product.productId,
+    name: product.productName,
+    price,
+  })
+  ga('ec:setAction', 'remove')
+  ga('send', 'event', {
+    eventAction: 'Click',
+    eventCategory: 'Remove from cart',
   })
 }
 
