@@ -103,6 +103,7 @@ export const addToCart = (
   if (!product) return
 
   ga('ec:addProduct', {
+    id: product.productId,
     name: product.productName,
     brand: product.brand,
     variant: product.variant,
@@ -119,13 +120,19 @@ export const addToCart = (
 /** Removal from cart events
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#add-remove-cart
  */
-export const removeFromCart = (product: Product, price: number) => {
+export const removeFromCart = (
+  product: Product,
+  price: number,
+  quantity: number
+) => {
   if (!product) return
 
   ga('ec:addProduct', {
     id: product.productId,
     name: product.productName,
+    variant: product.variant,
     price,
+    quantity,
   })
   ga('ec:setAction', 'remove')
   ga('send', 'event', {

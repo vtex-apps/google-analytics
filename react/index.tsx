@@ -105,23 +105,31 @@ function listener(e: MessageEvent) {
     return
   }
 
-  if (e.data.event === "addToCart") {
+  if (e.data.event === 'addToCart') {
     e.data.items.forEach((product: any) => {
-      product.productName = product.name
-      addToCart(product, product.price, product.quantity)
+      const addedProd = {
+        ...product,
+        productId: product.skuId,
+        productName: product.name,
+        variant: product.variant,
+      }
+      addToCart(addedProd, product.price, product.quantity)
     })
     return
   }
 
-  if (e.data.event === "removeFromCart") {
+  if (e.data.event === 'removeFromCart') {
     e.data.items.forEach((product: any) => {
-      product.productId = product.id
-      product.productName = product.name
-      removeFromCart(product, product.sellingPrice)
+      const removedProd = {
+        ...product,
+        productId: product.id,
+        productName: product.name,
+        variant: product.skuName,
+      }
+      removeFromCart(removedProd, product.sellingPrice, product.quantity)
     })
     return
   }
-
 }
 
 // Event listener for pageview
