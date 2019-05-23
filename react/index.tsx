@@ -71,15 +71,25 @@ function listener(e: MessageEvent) {
 
   // Event listener for productClick
   if (e.data.event === 'productClick') {
-    const product = e.data.product
-    product.selectedSku = product.sku.itemId
-    productClick(product)
+    const prodData = e.data.product
+    const skuId = prodData && prodData.sku && prodData.sku.itemId
+    const selectedProduct = {
+      ...e.data.product,
+      selectedSku: skuId,
+    }
+    productClick(selectedProduct)
     return
   }
 
   // Event listener for productImpression
   if (e.data.event === 'productImpression') {
-    productImpression(e.data.product, e.data.position, e.data.list)
+    const prodData = e.data.product
+    const skuId = prodData && prodData.sku && prodData.sku.itemId
+    const product = {
+      ...e.data.product,
+      selectedSku: skuId,
+    }
+    productImpression(product, e.data.position, e.data.list)
     return
   }
 
@@ -100,6 +110,7 @@ function listener(e: MessageEvent) {
       product.productName = product.name
       addToCart(product, product.price, product.quantity)
     })
+    return
   }
 
   if (e.data.event === "removeFromCart") {
@@ -108,6 +119,7 @@ function listener(e: MessageEvent) {
       product.productName = product.name
       removeFromCart(product, product.sellingPrice)
     })
+    return
   }
 
 }
