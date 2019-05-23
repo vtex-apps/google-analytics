@@ -109,9 +109,9 @@ function listener(e: MessageEvent) {
     e.data.items.forEach((product: any) => {
       const addedProd = {
         ...product,
-        productId: product.skuId,
+        productId: product.skuId || product.id,
         productName: product.name,
-        variant: product.variant,
+        variant: product.variant || product.skuName,
       }
       addToCart(addedProd, product.price, product.quantity)
     })
@@ -122,11 +122,12 @@ function listener(e: MessageEvent) {
     e.data.items.forEach((product: any) => {
       const removedProd = {
         ...product,
-        productId: product.id,
+        productId: product.id || product.skuId,
         productName: product.name,
         variant: product.skuName,
       }
-      removeFromCart(removedProd, product.sellingPrice, product.quantity)
+      const price = product.price || product.sellingPrice
+      removeFromCart(removedProd, price, product.quantity)
     })
     return
   }

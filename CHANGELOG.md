@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Pass missing params when dispatching cart events.
+- Pass missing params when dispatching cart events and relaxing for different incoming product info.
 
 ## [0.7.1] - 2019-05-23
 
