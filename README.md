@@ -1,2 +1,3 @@
-# google-analytics-app
-App for Google Analytics
+# DEPRECATED
+
+Please use Google Tag Manager pixel instead.
