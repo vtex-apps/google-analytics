@@ -1,0 +1,12 @@
+<script>
+  var gaId = "{{settings.gaId}}";
+  if (!gaId) {
+    console.error('Warning: No Google Analytics ID is defined. Please configure it in the apps admin.');
+  } else {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', gaId, 'auto');
+    ga('require', 'ec');
+    ga('send', 'pageview');
+  }
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>

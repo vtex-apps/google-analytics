@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0] - 2019-05-27
+
+### Changed
+
+- Migrate to new Pixel architecture.
+
 ## [0.7.1] - 2019-05-23
 ### Fixed
 

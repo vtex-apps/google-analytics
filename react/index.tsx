@@ -8,30 +8,6 @@ import {
   removeFromCart,
 } from './events/enhancedCommerce'
 
-const gaId = window.__SETTINGS__.gaId
-
-if (!gaId) {
-  throw new Error(
-    'Warning: No Google Analytics ID is defined. To setup the app, go to your admin.'
-  )
-}
-
-// Initialize async analytics
-window.ga =
-  window.ga ||
-  function() {
-    ;(ga.q = ga.q || []).push(arguments)
-  }
-ga.l = +new Date()
-ga('create', `${gaId}`, 'auto')
-ga('require', 'ec')
-
-// Load analytics script
-const script = document.createElement('script')
-script.src = `https://www.google-analytics.com/analytics.js`
-script.async = true
-document.head!.prepend(script)
-
 let currentUrl = ''
 
 interface EventData {
