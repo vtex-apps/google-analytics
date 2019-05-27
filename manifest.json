@@ -9,10 +9,12 @@
     "postreleasy": "vtex publish --verbose"
   },
   "builders": {
-    "react": "3.x"
+    "react": "3.x",
+    "store": "0.x",
+    "pixel": "0.x"
   },
   "dependencies": {
-    "vtex.pixel-manager": "0.x"
+    "vtex.pixel-interfaces": "1.x"
   },
   "policies": [
     {
@@ -29,5 +31,6 @@
         "type": "string"
       }
     }
-  }
+  },
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
