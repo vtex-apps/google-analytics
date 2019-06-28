@@ -68,27 +68,28 @@ export const productClick = (product: Product) => {
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
  */
 export const productImpression = (
-  product: Product,
-  position: number,
+  impressions: Array<{ product: Product, position: number }>,
   list: string
 ) => {
-  if (!product) return
+  impressions.forEach(({ product, position }) => {
+    if (!product) return
 
-  const category = getCategory(product.categories)
+    const category = getCategory(product.categories)
 
-  ga('ec:addImpression', {
-    id: product.productId,
-    name: product.productName,
-    category: category,
-    brand: product.brand,
-    variant: getSkuName(product.selectedSku, product.items),
-    list: list,
-    position: position,
-  })
-  ga('send', 'event', {
-    eventAction: 'Impression',
-    eventCategory: 'Product',
-    nonInteraction: 1,
+    ga('ec:addImpression', {
+      id: product.productId,
+      name: product.productName,
+      category: category,
+      brand: product.brand,
+      variant: getSkuName(product.selectedSku, product.items),
+      list: list,
+      position: position,
+    })
+    ga('send', 'event', {
+      eventAction: 'Impression',
+      eventCategory: 'Product',
+      nonInteraction: 1,
+    })
   })
 }
 

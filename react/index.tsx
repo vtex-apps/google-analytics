@@ -59,13 +59,11 @@ function listener(e: MessageEvent) {
 
   // Event listener for productImpression
   if (e.data.event === 'productImpression') {
-    const prodData = e.data.product
-    const skuId = prodData && prodData.sku && prodData.sku.itemId
-    const product = {
-      ...e.data.product,
-      selectedSku: skuId,
-    }
-    productImpression(product, e.data.position, e.data.list)
+    const impressions = e.data.impressions.map(({ product }: any) => {
+      const skuId = product && product.sku && product.sku.itemId
+      return { ...product, selectedSku: skuId }
+    })
+    productImpression(impressions, e.data.list)
     return
   }
 
