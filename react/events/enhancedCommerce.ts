@@ -5,7 +5,7 @@ interface Item {
   name: string
 }
 
-interface Product {
+export interface Product {
   brand: string
   categoryId: string
   categories: string[]
@@ -14,6 +14,12 @@ interface Product {
   selectedSku: string
   items: Item[]
   variant: string
+  sku: any
+}
+
+export interface Impression {
+  product: Product
+  position: number
 }
 
 const getSkuName = (selectedSku: string, items: Item[]) =>
@@ -67,10 +73,7 @@ export const productClick = (product: Product) => {
 /** Product Impression event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
  */
-export const productImpression = (
-  impressions: Array<{ product: Product, position: number }>,
-  list: string
-) => {
+export const productImpression = (impressions: Impression[], list: string) => {
   impressions.forEach(({ product, position }) => {
     if (!product) return
 
