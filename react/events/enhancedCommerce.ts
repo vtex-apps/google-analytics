@@ -5,7 +5,7 @@ interface Item {
   name: string
 }
 
-interface Product {
+export interface Product {
   brand: string
   categoryId: string
   categories: string[]
@@ -14,6 +14,12 @@ interface Product {
   selectedSku: string
   items: Item[]
   variant: string
+  sku: any
+}
+
+export interface Impression {
+  product: Product
+  position: number
 }
 
 const getSkuName = (selectedSku: string, items: Item[]) =>
@@ -67,28 +73,26 @@ export const productClick = (product: Product) => {
 /** Product Impression event
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
  */
-export const productImpression = (
-  product: Product,
-  position: number,
-  list: string
-) => {
-  if (!product) return
+export const productImpression = (impressions: Impression[], list: string) => {
+  impressions.forEach(({ product, position }) => {
+    if (!product) return
 
-  const category = getCategory(product.categories)
+    const category = getCategory(product.categories)
 
-  ga('ec:addImpression', {
-    id: product.productId,
-    name: product.productName,
-    category: category,
-    brand: product.brand,
-    variant: getSkuName(product.selectedSku, product.items),
-    list: list,
-    position: position,
-  })
-  ga('send', 'event', {
-    eventAction: 'Impression',
-    eventCategory: 'Product',
-    nonInteraction: 1,
+    ga('ec:addImpression', {
+      id: product.productId,
+      name: product.productName,
+      category: category,
+      brand: product.brand,
+      variant: getSkuName(product.selectedSku, product.items),
+      list: list,
+      position: position,
+    })
+    ga('send', 'event', {
+      eventAction: 'Impression',
+      eventCategory: 'Product',
+      nonInteraction: 1,
+    })
   })
 }
 

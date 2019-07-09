@@ -6,6 +6,7 @@ import {
   productImpression,
   purchase,
   removeFromCart,
+  Impression,
 } from './events/enhancedCommerce'
 
 let currentUrl = ''
@@ -59,13 +60,27 @@ function listener(e: MessageEvent) {
 
   // Event listener for productImpression
   if (e.data.event === 'productImpression') {
-    const prodData = e.data.product
-    const skuId = prodData && prodData.sku && prodData.sku.itemId
-    const product = {
-      ...e.data.product,
-      selectedSku: skuId,
+    const {
+      product: oldFormatProduct,
+      position: oldFormatPosition,
+      impressions,
+    } = e.data
+    let parsedImpressions: Impression[] = []
+    if (oldFormatProduct != null && oldFormatPosition !== null) {
+      const skuId =
+        oldFormatProduct && oldFormatProduct.sku && oldFormatProduct.sku.itemId
+      const newProduct = { ...oldFormatProduct, selectedSku: skuId }
+      parsedImpressions = [{ product: newProduct, position: oldFormatPosition }]
     }
-    productImpression(product, e.data.position, e.data.list)
+
+    if (impressions != null) {
+      parsedImpressions = impressions.map(({ product }: Impression) => {
+        const skuId = product && product.sku && product.sku.itemId
+        return { ...product, selectedSku: skuId }
+      })
+    }
+
+    productImpression(parsedImpressions, e.data.list)
     return
   }
 
@@ -81,7 +96,7 @@ function listener(e: MessageEvent) {
     return
   }
 
-  if (e.data.event === "addToCart") {
+  if (e.data.event === 'addToCart') {
     e.data.items.forEach((product: any) => {
       product.productName = product.name
       addToCart(product, product.price, product.quantity)
@@ -89,7 +104,7 @@ function listener(e: MessageEvent) {
     return
   }
 
-  if (e.data.event === "removeFromCart") {
+  if (e.data.event === 'removeFromCart') {
     e.data.items.forEach((product: any) => {
       product.productId = product.id
       product.productName = product.name
@@ -97,7 +112,6 @@ function listener(e: MessageEvent) {
     })
     return
   }
-
 }
 
 // Event listener for pageview
